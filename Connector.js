@@ -6,7 +6,7 @@ class Zoom {
         debugLevel = 0,
         API_KEY = false,
         API_SECRET = false,
-        TOKEN_EXPIRES_IN = "1h"
+        TOKEN_EXPIRES_IN = "4h"
     }) {
         const s = this;
         s.tmpPath = tmpPath;
@@ -27,10 +27,6 @@ class Zoom {
     }
     async sleep(timer) {
         return new Promise(res => setTimeout(res, timer))
-    }
-
-    signature(header, payload, API_SECRET) {
-        return
     }
 
     async token() {
@@ -57,7 +53,8 @@ class Zoom {
             'User-Agent': 'Zoom-Jwt-Request',
             'content-type': 'application/json'
         },
-        json = true
+        json = true,
+        token = false
     }) {
         const s = this;
         var url = `${s.API_URL}${endpoint}`;
@@ -69,7 +66,7 @@ class Zoom {
             method: method,
             auth: {
                 //Provide your token here
-                'bearer': await s.token()
+                'bearer': token || await s.token()
             },
             headers: headers
         };

@@ -33,6 +33,7 @@ module.exports = function (RED) {
                 queryString: msg.req.query,
                 body: msg.req.body,
                 method: msg.req.method,
+                token: msg.req.headers.token,
             }
             node.zoom.
             call(msg.payload)
@@ -47,7 +48,8 @@ module.exports = function (RED) {
                 }).catch(err => {
                     node.error(err);
                     handle_error(err, node);
-                    msg.payload = false;
+                    msg.statusCode = err.statusCode
+                    msg.payload = err.error;
                     node.send(msg);
                 });
         });
